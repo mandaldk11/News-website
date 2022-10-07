@@ -19,11 +19,11 @@ export default class App extends Component {
 
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/entertainment' element={<News pageSize={9} category="entertainment" />} />
-            <Route path='/health' element={<News pageSize={9} category="health" />} />
-            <Route path='/science' element={<News pageSize={9} category="science" />} />
-            <Route path='/sports' element={<News pageSize={9} category="sports" />} />
-            <Route path='/technology' element={<News pageSize={9} category="technology" />} />
+            <Route path='/entertainment' element={<News  category="entertainment" />} />
+            <Route path='/health' element={<News  category="health" />} />
+            <Route path='/science' element={<News  category="science" />} />
+            <Route path='/sports' element={<News  category="sports" />} />
+            <Route path='/technology' element={<News  category="technology" />} />
           </Routes>
           <Footer />
         </Router>

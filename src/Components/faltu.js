@@ -1,1 +1,0 @@
-navbar-expand-lg bg-danger navbar-dnager

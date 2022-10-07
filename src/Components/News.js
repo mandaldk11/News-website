@@ -1,74 +1,38 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import NewsItem from './NewsItem'
 
 
-export default class News extends Component {
+function News(props) {
+  const [articles, setArticles] = useState([]);
+  const [page, setPage] = useState(1);
 
-  constructor() {
-    super();
+  useEffect(() => {
+    fetch(`https://newsapi.org/v2/top-headlines?category=${props.category}&apiKey=0d9fdb9691cd414bac1f73f4691b09cf&page=1`).then((response) => response.json()).then((result) => {
+      setArticles(result.articles);
+      setPage(result.setTotalResult);
+    }, [])
+  })
 
-    this.state = {
-      articles: [],
-      page: 1
-    }
-  }
-  async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?category=${this.props.category}&apiKey=0d9fdb9691cd414bac1f73f4691b09cf&page=1&pageSize=${this.props.pageSize}`;
+  return (
+    <div className='container my-3'>
+      <h3 className='text-center'><b>News Website</b> - top headlines</h3>
+      <div className='row my-3'>
+        {
+          articles.map((element) => {
 
-    let data = await fetch(url)
-    let parsedData = await data.json();
-    console.log(parsedData);
-    this.setState({
-      articles: parsedData.articles,
-      totalResult: parsedData.totalResults
+            return <div className='col-md-3  mx-4 my-2' key={element.url}>
+              <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : "In a strong message on terrorism, External Affairs Minister S Jaishankar said on Saturday that no rhetoric, however sanctimonious, can ever cover-up blood stains."} imageUrl={element.urlToImage ? element.urlToImage : "https://c.ndtvimg.com/2022-09/1u1homto_jaishankar_625x300_25_September_22.jpg"} newsUrl={element.url} />
+            </div>
 
-    });
-  }
-  handlePrev = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?category=${this.props.category}&apiKey=0d9fdb9691cd414bac1f73f4691b09cf&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
-
-    let data = await fetch(url)
-    let parsedData = await data.json();
-
-    this.setState({
-      page: this.state.page - 1,
-      articles: parsedData.articles,
-
-    });
-  }
-  handleNext = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?category=${this.props.category}&apiKey=0d9fdb9691cd414bac1f73f4691b09cf&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
-
-    let data = await fetch(url)
-    let parsedData = await data.json();
-    this.setState({
-      page: this.state.page + 1,
-      articles: parsedData.articles
-
-    });
-
-  }
-
-  render() {
-    return (
-      <div className='container my-3'>
-        <h3 className='text-center'><b>News Website</b> - top headlines</h3>
-        <div className='row my-3'>
-          {
-            this.state.articles.map((element) => {
-
-              return <div className='col-md-3  mx-4 my-2' key={element.url}>
-                <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : "In a strong message on terrorism, External Affairs Minister S Jaishankar said on Saturday that no rhetoric, however sanctimonious, can ever cover-up blood stains."} imageUrl={element.urlToImage ? element.urlToImage : "https://c.ndtvimg.com/2022-09/1u1homto_jaishankar_625x300_25_September_22.jpg"} newsUrl={element.url} />
-              </div>
-
-            })
-          }
-          <div className='container d-flex justify-content-between my-3'>
-            <button disabled={this.state.page <= 1} onClick={this.handlePrev} className='btn btn-sm btn-warning '>&larr; Previous</button>
-            <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResult / this.props.pageSize)} onClick={this.handleNext} className='btn btn-sm btn-warning'>Next&rarr;</button>
-          </div>
-        </div>
+          })
+        }
+        {/* <div className='container d-flex justify-content-between my-3'>
+          <button disabled={page <= 1} onClick={handlePrev} className='btn btn-sm btn-warning '>&larr; Previous</button>
+          <button disabled={page + 1 > Math.ceil(totalresult / props.pageSize)} onClick={handleNext} className='btn btn-sm btn-warning'>Next&rarr;</button>
+        </div> */}
       </div>
-    )
-  }
+    </div>
+  )
 }
+export default News;
+
