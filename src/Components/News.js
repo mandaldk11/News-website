@@ -6,12 +6,16 @@ function News(props) {
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
 
-  const proxyUrl = "https://cors-anywhere.herokuapp.com/"
+  const proxyUrl = "https://cors-anywhere.herokuapp.com/";
   const url = `${proxyUrl}https://newsapi.org/v2/top-headlines?category=${props.category}&apiKey=0d9fdb9691cd414bac1f73f4691b09cf&page=1`;
   const request = new Request(url);
 
   useEffect(() => {
-    fetch(request).then((response) => response.json()).then((result) => {
+    fetch(request,  { 
+      headers: new Headers({
+          'origin': 'localhost'
+      }), 
+  }).then((response) => response.json()).then((result) => {
       setArticles(result.articles);
       setPage(result.setTotalResult);
     }, [])
