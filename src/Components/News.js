@@ -6,8 +6,12 @@ function News(props) {
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
 
+  const proxyUrl = "https://cors-anywhere.herokuapp.com/"
+  const url = `${proxyUrl}https://newsapi.org/v2/top-headlines?category=${props.category}&apiKey=0d9fdb9691cd414bac1f73f4691b09cf&page=1`;
+  const request = new Request(url);
+
   useEffect(() => {
-    fetch(`https://newsapi.org/v2/top-headlines?category=${props.category}&apiKey=0d9fdb9691cd414bac1f73f4691b09cf&page=1`).then((response) => response.json()).then((result) => {
+    fetch(request).then((response) => response.json()).then((result) => {
       setArticles(result.articles);
       setPage(result.setTotalResult);
     }, [])
@@ -26,10 +30,7 @@ function News(props) {
 
           })
         }
-        {/* <div className='container d-flex justify-content-between my-3'>
-          <button disabled={page <= 1} onClick={handlePrev} className='btn btn-sm btn-warning '>&larr; Previous</button>
-          <button disabled={page + 1 > Math.ceil(totalresult / props.pageSize)} onClick={handleNext} className='btn btn-sm btn-warning'>Next&rarr;</button>
-        </div> */}
+       
       </div>
     </div>
   )
